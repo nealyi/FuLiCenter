@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <RadioGroup
+    <LinearLayout
             android:id="@+id/radioGroup"
             android:background="#eee"
             android:orientation="horizontal"
@@ -22,16 +22,19 @@
             android:layout_height="wrap_content">
 
         <RadioButton
+                android:id="@+id/new_good"
                 style="@style/MenuStyle"
                 android:text="新品"
                 android:drawableTop="@drawable/selector_menu_item_new_good"
                 />
         <RadioButton
+                android:id="@+id/boutique"
                 style="@style/MenuStyle"
                 android:text="精品"
                 android:drawableTop="@drawable/selector_menu_item_boutique"
                 />
         <RadioButton
+                android:id="@+id/category"
                 style="@style/MenuStyle"
                 android:text="分类"
                 android:drawableTop="@drawable/selector_menu_item_category"
@@ -42,17 +45,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             <RadioButton
+                    android:id="@+id/cart"
                     style="@style/MenuStyle"
                     android:text="购物车"
                     android:drawableTop="@drawable/selector_menu_item_cart"
                     />
         </LinearLayout>
         <RadioButton
+                android:id="@+id/personal_center"
                 style="@style/MenuStyle"
                 android:text="我"
                 android:drawableTop="@drawable/selector_menu_item_personal_center"
                 />
-    </RadioGroup>
+    </LinearLayout>
 
     <View
             android:layout_width="match_parent"
