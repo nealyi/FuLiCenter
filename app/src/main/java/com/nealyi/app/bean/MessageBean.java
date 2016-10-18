@@ -1,20 +1,14 @@
 package com.nealyi.app.bean;
 
-/**
- * Created by nealyi on 16/10/13.
- */
 public class MessageBean {
 
     /**
      * success : true
-     * msg :
+     * msg : 添加收藏成功
      */
 
     private boolean success;
     private String msg;
-
-    public MessageBean() {
-    }
 
     public boolean isSuccess() {
         return success;

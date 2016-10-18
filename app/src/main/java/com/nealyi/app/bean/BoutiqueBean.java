@@ -1,16 +1,15 @@
 package com.nealyi.app.bean;
 
-/**
- * Created by nealyi on 16/10/13.
- */
-public class BoutiqueBean {
+import java.io.Serializable;
+
+public class BoutiqueBean implements Serializable {
 
     /**
      * id : 262
      * title : 不一样的新妆，不一样的美丽
      * description : 快速增长修护预防脱发洗发水让头发健康快速生长更美丽
      * name : 拯救头发，美丽新妆
-     * imageurl : cat_image/boutique1.png
+     * imageurl : cat_image/boutique1.jpg
      */
 
     private int id;
@@ -18,9 +17,6 @@ public class BoutiqueBean {
     private String description;
     private String name;
     private String imageurl;
-
-    public BoutiqueBean() {
-    }
 
     public int getId() {
         return id;
