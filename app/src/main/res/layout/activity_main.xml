@@ -63,11 +63,12 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:id="@+id/line"
             android:layout_above="@id/radioGroup"
             android:background="#666"/>
     <RelativeLayout
             android:id="@+id/fragment_container"
-            android:layout_above="@id/radioGroup"
+            android:layout_above="@id/line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 

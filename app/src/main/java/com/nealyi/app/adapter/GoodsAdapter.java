@@ -1,8 +1,9 @@
 package com.nealyi.app.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,10 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.NewGoodsBean;
 import com.nealyi.app.utils.ImageLoader;
+import com.nealyi.app.utils.MFGT;
 
 import java.util.ArrayList;
 
@@ -24,11 +27,21 @@ import java.util.ArrayList;
 public class GoodsAdapter extends Adapter {
     Context mContext;
     ArrayList<NewGoodsBean> mList;
+    boolean isMore;//Add data is more or not
 
     public GoodsAdapter(Context context, ArrayList<NewGoodsBean> list) {
         mContext = context;
         mList = new ArrayList<>();
         mList.addAll(list);
+    }
+
+    public boolean isMore() {
+        return isMore;
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -45,7 +58,8 @@ public class GoodsAdapter extends Adapter {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (getItemViewType(position) == I.TYPE_FOOTER) {
-
+            FootViewHolder footViewHolder = (FootViewHolder) holder;
+            footViewHolder.itemFooterTextView.setText(getFootString());
         } else {
             GoodsViewHolder goodsViewHolder = (GoodsViewHolder) holder;
             NewGoodsBean goods = mList.get(position);
@@ -53,8 +67,12 @@ public class GoodsAdapter extends Adapter {
             ImageLoader.downloadImg(mContext, goodsViewHolder.itemGoodsImageView, goods.getGoodsThumb());
             goodsViewHolder.itemGoodsGoodsName.setText(goods.getGoodsName());
             goodsViewHolder.itemGoodsGoodsPrice.setText(goods.getCurrencyPrice());
+            goodsViewHolder.itemGoods.setTag(goods.getGoodsId());
         }
+    }
 
+    private int getFootString() {
+        return isMore?R.string.load_more:R.string.no_more;
     }
 
     @Override
@@ -79,6 +97,11 @@ public class GoodsAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
+    public void addData(ArrayList<NewGoodsBean> list) {
+        mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
     static class FootViewHolder extends ViewHolder {
         @BindView(R.id.item_footer_textView)
         TextView itemFooterTextView;
@@ -89,19 +112,25 @@ public class GoodsAdapter extends Adapter {
         }
     }
 
-    static class GoodsViewHolder extends ViewHolder {
+    class GoodsViewHolder extends ViewHolder{
         @BindView(R.id.item_goods_imageView)
         ImageView itemGoodsImageView;
         @BindView(R.id.item_goods_goodsName)
         TextView itemGoodsGoodsName;
         @BindView(R.id.item_goods_goodsPrice)
         TextView itemGoodsGoodsPrice;
-        @BindView(R.id.linearLayout)
-        LinearLayout linearLayout;
+        @BindView(R.id.item_goods)
+        LinearLayout itemGoods;
 
         GoodsViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        @OnClick(R.id.item_goods)
+        public void onGoodsItemClick() {
+            int goodId = (int) itemGoods.getTag();
+            MFGT.gotoGoodsDetailActivity(mContext, goodId);
         }
     }
 }

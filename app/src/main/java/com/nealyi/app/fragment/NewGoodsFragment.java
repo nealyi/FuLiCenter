@@ -20,8 +20,10 @@ import com.nealyi.app.adapter.GoodsAdapter;
 import com.nealyi.app.bean.NewGoodsBean;
 import com.nealyi.app.net.NetDao;
 import com.nealyi.app.net.OkHttpUtils;
+import com.nealyi.app.utils.CommonUtils;
 import com.nealyi.app.utils.ConvertUtils;
 import com.nealyi.app.utils.L;
+import com.nealyi.app.view.SpaceItemDecoration;
 
 
 import java.util.ArrayList;
@@ -42,7 +44,9 @@ public class NewGoodsFragment extends Fragment {
     ArrayList<NewGoodsBean> mList;
     GoodsAdapter mAdapter;
     MainActivity mContext;
+    GridLayoutManager gridLayoutManager;
     int pageId = 1;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,25 +58,87 @@ public class NewGoodsFragment extends Fragment {
         mAdapter = new GoodsAdapter(mContext, mList);
         initView();
         initData();
+        setListener();
         return view;
     }
 
-    private void initData() {
+    private void setListener() {
+        setPullUpListener();
+        setPullDownListener();
+    }
+
+    private void setPullDownListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLayout.setEnabled(true);
+                refreshLayout.setRefreshing(true);
+                mTvRefresh.setVisibility(View.VISIBLE);
+                pageId = 1;
+                downloadNewGoods(I.ACTION_PULL_DOWN);
+            }
+        });
+    }
+
+    private void downloadNewGoods(final int action) {
         NetDao.downloadNewGoods(mContext, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                if(result!=null && result.length>0){
+                refreshLayout.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
+                mAdapter.setMore(true);
+                L.e("result"+result);
+                if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    mAdapter.initData(list);
+                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+                        mAdapter.initData(list);
+                    } else {
+                        mAdapter.addData(list);
+                    }
+                    if (list.size() < I.PAGE_ID_DEFAULT) {
+                        mAdapter.setMore(false);
+                    }
+                } else {
+                    mAdapter.setMore(false);
                 }
             }
 
             @Override
             public void onError(String error) {
+                refreshLayout.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
+                mAdapter.setMore(false);
+                CommonUtils.showShortToast(error);
                 L.e("error:"+error);
             }
         });
+    }
 
+    private void setPullUpListener() {
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastPosition == mAdapter.getItemCount() - 1
+                        && mAdapter.isMore()) {
+                    pageId++;
+                    downloadNewGoods(I.ACTION_PULL_UP);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int firstPosition = gridLayoutManager.findFirstCompletelyVisibleItemPosition();
+                refreshLayout.setEnabled(firstPosition == 0);
+            }
+        });
+    }
+
+    private void initData() {
+        downloadNewGoods(I.ACTION_DOWNLOAD);
     }
 
     private void initView() {
@@ -82,10 +148,11 @@ public class NewGoodsFragment extends Fragment {
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow)
         );
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, I.COLUM_NUM);
+        gridLayoutManager = new GridLayoutManager(mContext, I.COLUM_NUM);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(12));
     }
 
 }
