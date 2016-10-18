@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
 //            @Override
 //            public void run() {
 //                long startTime = System.currentTimeMillis();
-//                //
+//                //加载数据时间
 //                long costTime = System.currentTimeMillis() - startTime;
 //                if (sleepTime - costTime > 0) {
 //                    SystemClock.sleep(sleepTime - costTime);
