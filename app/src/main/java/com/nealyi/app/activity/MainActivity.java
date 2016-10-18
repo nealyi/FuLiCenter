@@ -1,6 +1,9 @@
 package com.nealyi.app.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
@@ -8,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.nealyi.app.R;
+import com.nealyi.app.fragment.NewGoodsFragment;
 
 import java.util.ArrayList;
 
@@ -25,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     int index;
     RadioButton[] rbs;
+    Fragment[] mFragment;
+    NewGoodsFragment mNewGoodsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
+        initFragment();
+    }
+
+    private void initFragment() {
+        mFragment = new Fragment[5];
+        mNewGoodsFragment = new NewGoodsFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.fragment_container, mNewGoodsFragment)
+                .show(mNewGoodsFragment)
+                .commit();
     }
 
     private void initView() {
