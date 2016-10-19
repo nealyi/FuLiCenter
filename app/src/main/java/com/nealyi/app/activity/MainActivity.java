@@ -16,7 +16,7 @@ import com.nealyi.app.fragment.NewGoodsFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     @BindView(R.id.new_good)
     RadioButton mLayoutNewGood;
     @BindView(R.id.boutique)
@@ -37,11 +37,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initView();
+        super.onCreate(savedInstanceState);
         initFragment();
+    }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     private void initFragment() {
@@ -59,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         rbs = new RadioButton[5];
         rbs[0] = mLayoutNewGood;
         rbs[1] = mLayoutBoutique;
@@ -112,5 +122,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }
