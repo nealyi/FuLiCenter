@@ -2,6 +2,7 @@ package com.nealyi.app.net;
 
 import android.content.Context;
 import com.nealyi.app.I;
+import com.nealyi.app.bean.BoutiqueBean;
 import com.nealyi.app.bean.GoodsDetailsBean;
 import com.nealyi.app.bean.NewGoodsBean;
 
@@ -24,6 +25,13 @@ public class NetDao {
         utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
                 .addParam(I.GoodsDetails.KEY_GOODS_ID,String.valueOf(goodsId))
                 .targetClass(GoodsDetailsBean.class)
+                .execute(listener);
+    }
+
+    public static void downloadBoutique(Context context, OkHttpUtils.OnCompleteListener<BoutiqueBean[]> listener) {
+        OkHttpUtils<BoutiqueBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
+                .targetClass(BoutiqueBean[].class)
                 .execute(listener);
     }
 }

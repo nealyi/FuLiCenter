@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.nealyi.app.R;
+import com.nealyi.app.fragment.BoutiqueFragment;
 import com.nealyi.app.fragment.NewGoodsFragment;
 
 import java.util.ArrayList;
@@ -28,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
     RadioButton mLayoutPersonalCenter;
 
     int index;
+    int currentIndex;
     RadioButton[] rbs;
     Fragment[] mFragment;
     NewGoodsFragment mNewGoodsFragment;
+    BoutiqueFragment mBoutiqueFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,14 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment() {
         mFragment = new Fragment[5];
         mNewGoodsFragment = new NewGoodsFragment();
+        mBoutiqueFragment = new BoutiqueFragment();
+        mFragment[0] = mNewGoodsFragment;
+        mFragment[1] = mBoutiqueFragment;
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.fragment_container, mNewGoodsFragment)
+                .add(R.id.fragment_container,mBoutiqueFragment)
+                .hide(mBoutiqueFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
@@ -78,7 +86,20 @@ public class MainActivity extends AppCompatActivity {
                 index = 4;
                 break;
         }
+        setFragment();
+    }
+
+    private void setFragment() {
+        if (index != currentIndex) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.hide(mFragment[currentIndex]);
+//            if (!mFragment[index].isAdded()) {
+//                transaction.add(R.id.fragment_container, mFragment[index]);
+//            }
+            transaction.show(mFragment[index]).commit();
+        }
         setRadioButtonStatus();
+        currentIndex = index;
     }
 
     private void setRadioButtonStatus() {
