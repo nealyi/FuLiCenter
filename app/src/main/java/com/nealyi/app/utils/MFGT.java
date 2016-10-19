@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
+import com.nealyi.app.activity.BoutiqueChildActivity;
 import com.nealyi.app.activity.GoodsDetailActivity;
 import com.nealyi.app.activity.MainActivity;
+import com.nealyi.app.bean.BoutiqueBean;
 
 
 public class MFGT {
@@ -33,6 +35,13 @@ public class MFGT {
 
     public static void startActivity(Context context, Intent intent) {
         context.startActivity(intent);
-        ((MainActivity)context).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
+        ((Activity)context).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
+    }
+
+    public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean) {
+        Intent intent = new Intent();
+        intent.setClass(context, BoutiqueChildActivity.class);
+        intent.putExtra(I.Boutique.CAT_ID, bean);
+        startActivity(context, intent);
     }
 }

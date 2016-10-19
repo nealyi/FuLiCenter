@@ -26,6 +26,11 @@
                 android:label="@string/title_activity_goods_detail"
                 android:theme="@style/AppTheme">
         </activity>
+        <activity
+                android:name=".activity.BoutiqueChildActivity"
+                android:label="@string/title_activity_boutique_child"
+                android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

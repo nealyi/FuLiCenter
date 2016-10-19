@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.BoutiqueBean;
 import com.nealyi.app.utils.ImageLoader;
+import com.nealyi.app.utils.MFGT;
 import com.nealyi.app.view.FootViewHolder;
 
 import java.util.ArrayList;
@@ -66,6 +69,7 @@ public class BoutiqueAdapter extends Adapter {
             ((BoutiqueViewHolder) holder).mTvTitle.setText(boutiqueBean.getTitle());
             ((BoutiqueViewHolder) holder).mTvDescription.setText(boutiqueBean.getDescription());
             ((BoutiqueViewHolder) holder).mTvName.setText(boutiqueBean.getName());
+            ((BoutiqueViewHolder) holder).mRelativeLayout.setTag(boutiqueBean);
         }
     }
 
@@ -99,7 +103,7 @@ public class BoutiqueAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
-    static class BoutiqueViewHolder extends ViewHolder{
+    class BoutiqueViewHolder extends ViewHolder{
         @BindView(R.id.iv_imageurl)
         ImageView mIvImageurl;
         @BindView(R.id.tv_title)
@@ -108,10 +112,17 @@ public class BoutiqueAdapter extends Adapter {
         TextView mTvDescription;
         @BindView(R.id.tv_name)
         TextView mTvName;
+        @BindView(R.id.rv_boutique)
+        RelativeLayout mRelativeLayout;
 
         BoutiqueViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+        @OnClick(R.id.rv_boutique)
+        public void onBoutiqueClick() {
+            BoutiqueBean bean = (BoutiqueBean) mRelativeLayout.getTag();
+            MFGT.gotoBoutiqueChildActivity(mContext,bean);
         }
     }
 }

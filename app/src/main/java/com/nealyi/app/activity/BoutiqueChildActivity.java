@@ -1,63 +1,63 @@
-package com.nealyi.app.fragment;
-
+package com.nealyi.app.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
-import com.nealyi.app.activity.MainActivity;
 import com.nealyi.app.adapter.GoodsAdapter;
+import com.nealyi.app.bean.BoutiqueBean;
 import com.nealyi.app.bean.NewGoodsBean;
 import com.nealyi.app.net.NetDao;
 import com.nealyi.app.net.OkHttpUtils;
 import com.nealyi.app.utils.CommonUtils;
 import com.nealyi.app.utils.ConvertUtils;
 import com.nealyi.app.utils.L;
+import com.nealyi.app.utils.MFGT;
 import com.nealyi.app.view.SpaceItemDecoration;
-
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class NewGoodsFragment extends BaseFragment {
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.linearLayout)
-    LinearLayout linearLayout;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+public class BoutiqueChildActivity extends BaseActivity {
+
+
+    @BindView(R.id.tv_common_title)
+    TextView mTvCommonTitle;
     @BindView(R.id.tv_refresh)
     TextView mTvRefresh;
+    @BindView(R.id.recyclerView)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.linearLayout)
+    LinearLayout mLinearLayout;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout mRefreshLayout;
 
-    ArrayList<NewGoodsBean> mList;
-    GoodsAdapter mAdapter;
-    MainActivity mContext;
-    GridLayoutManager gridLayoutManager;
+    BoutiqueBean mBoutiqueBean;
+    BoutiqueChildActivity mContext;
     int pageId = 1;
-
+    GoodsAdapter mAdapter;
+    GridLayoutManager mGridLayoutManager;
+    ArrayList<NewGoodsBean> mList;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
-        ButterKnife.bind(this, view);
-        mContext = (MainActivity) getContext();
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_boutique_child);
+        ButterKnife.bind(this);
+        mBoutiqueBean = (BoutiqueBean) getIntent().getSerializableExtra(I.Boutique.CAT_ID);
+        if (mBoutiqueBean == null) {
+            finish();
+        }
+        mContext = this;
         mList = new ArrayList<>();
-        mAdapter = new GoodsAdapter(mContext, mList);
-        super.onCreateView(inflater, container, null);
-        return view;
+        mAdapter = new GoodsAdapter(mContext,mList);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -67,11 +67,11 @@ public class NewGoodsFragment extends BaseFragment {
     }
 
     private void setPullDownListener() {
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshLayout.setEnabled(true);
-                refreshLayout.setRefreshing(true);
+                mRefreshLayout.setEnabled(true);
+                mRefreshLayout.setRefreshing(true);
                 mTvRefresh.setVisibility(View.VISIBLE);
                 pageId = 1;
                 downloadNewGoods(I.ACTION_PULL_DOWN);
@@ -80,10 +80,10 @@ public class NewGoodsFragment extends BaseFragment {
     }
 
     private void downloadNewGoods(final int action) {
-        NetDao.downloadNewGoods(mContext, I.CAT_ID, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+        NetDao.downloadNewGoods(mContext, mBoutiqueBean.getId(), pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                refreshLayout.setRefreshing(false);
+                mRefreshLayout.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
                 L.e("result" + result);
@@ -104,7 +104,7 @@ public class NewGoodsFragment extends BaseFragment {
 
             @Override
             public void onError(String error) {
-                refreshLayout.setRefreshing(false);
+                mRefreshLayout.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(false);
                 CommonUtils.showShortToast(error);
@@ -114,11 +114,11 @@ public class NewGoodsFragment extends BaseFragment {
     }
 
     private void setPullUpListener() {
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+                int lastPosition = mGridLayoutManager.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastPosition == mAdapter.getItemCount() - 1
                         && mAdapter.isMore()) {
@@ -130,8 +130,8 @@ public class NewGoodsFragment extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int firstPosition = gridLayoutManager.findFirstCompletelyVisibleItemPosition();
-                refreshLayout.setEnabled(firstPosition == 0);
+                int firstPosition = mGridLayoutManager.findFirstCompletelyVisibleItemPosition();
+                mRefreshLayout.setEnabled(firstPosition == 0);
             }
         });
     }
@@ -144,17 +144,22 @@ public class NewGoodsFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        refreshLayout.setColorSchemeColors(
+        mRefreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow)
         );
-        gridLayoutManager = new GridLayoutManager(mContext, I.COLUM_NUM);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(12));
+        mGridLayoutManager = new GridLayoutManager(mContext, I.COLUM_NUM);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(12));
+        mTvCommonTitle.setText(mBoutiqueBean.getTitle());
     }
 
+    @OnClick(R.id.backClickArea)
+    public void onClick() {
+        MFGT.finish(this);
+    }
 }

@@ -9,8 +9,7 @@
     <RelativeLayout
             android:id="@+id/layout_title"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/main_orange">
+            android:layout_height="35dp">
         <include layout="@layout/common_head_title"/>
         <ImageView
                 android:id="@+id/iv_good_share"
