@@ -30,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by nealyi on 16/10/19.
  */
-public class BoutiqueFragment extends Fragment {
+public class BoutiqueFragment extends BaseFragment {
     @BindView(R.id.tv_refresh)
     TextView mTvRefresh;
     @BindView(R.id.recyclerView)
@@ -45,6 +45,8 @@ public class BoutiqueFragment extends Fragment {
     BoutiqueAdapter mAdapter;
     LinearLayoutManager mLinearLayoutManager;
 
+    int pageId = 1;
+
     @Nullable
     @Override
 
@@ -54,12 +56,54 @@ public class BoutiqueFragment extends Fragment {
         mContext = (MainActivity) getContext();
         mList = new ArrayList<>();
         mAdapter = new BoutiqueAdapter(mContext, mList);
-        initView();
-        initData();
+        super.onCreateView(inflater, container, null);
         return view;
     }
 
-    private void initData() {
+    @Override
+    protected void setListener() {
+        setPullUpListener();
+        setPullDownListener();
+    }
+
+    private void setPullUpListener() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastPosition == mAdapter.getItemCount() - 1
+                        && mAdapter.isMore()) {
+                    pageId++;
+                    downloadBoutique(I.ACTION_PULL_UP);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int firstPosition = mLinearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                mSwipeRefreshLayout.setEnabled(firstPosition == 0);
+            }
+        });
+    }
+
+    private void setPullDownListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setEnabled(true);
+                mSwipeRefreshLayout.setRefreshing(true);
+                mTvRefresh.setVisibility(View.VISIBLE);
+                pageId = 1;
+                downloadBoutique(I.ACTION_PULL_DOWN);
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
         downloadBoutique(I.ACTION_DOWNLOAD);
     }
 
@@ -97,7 +141,8 @@ public class BoutiqueFragment extends Fragment {
         });
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         mSwipeRefreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
