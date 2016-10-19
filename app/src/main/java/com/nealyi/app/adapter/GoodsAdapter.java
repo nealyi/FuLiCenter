@@ -1,7 +1,6 @@
 package com.nealyi.app.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.nealyi.app.R;
 import com.nealyi.app.bean.NewGoodsBean;
 import com.nealyi.app.utils.ImageLoader;
 import com.nealyi.app.utils.MFGT;
+import com.nealyi.app.view.FootViewHolder;
 
 import java.util.ArrayList;
 
@@ -102,15 +102,6 @@ public class GoodsAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
-    static class FootViewHolder extends ViewHolder {
-        @BindView(R.id.item_footer_textView)
-        TextView itemFooterTextView;
-
-        FootViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
 
     class GoodsViewHolder extends ViewHolder{
         @BindView(R.id.item_goods_imageView)
