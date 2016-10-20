@@ -12,6 +12,8 @@ import com.nealyi.app.activity.MainActivity;
 import com.nealyi.app.bean.BoutiqueBean;
 import com.nealyi.app.bean.CategoryChildBean;
 
+import java.util.ArrayList;
+
 
 public class MFGT {
     public static void finish(Activity activity){
@@ -47,10 +49,12 @@ public class MFGT {
         startActivity(context, intent);
     }
 
-    public static void gotoCategoryChildActivity(Context context, CategoryChildBean bean) {
+    public static void gotoCategoryChildActivity(Context context, CategoryChildBean bean, String groupName, ArrayList<CategoryChildBean> list) {
         Intent intent = new Intent();
         intent.setClass(context, CategoryChildActivity.class);
         intent.putExtra(I.CategoryChild.CAT_ID, bean);
+        intent.putExtra(I.CategoryGroup.NAME, groupName);
+        intent.putExtra(I.CategoryChild.ID, list);
         startActivity(context, intent);
     }
 }

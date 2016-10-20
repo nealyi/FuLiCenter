@@ -20,10 +20,7 @@ import com.nealyi.app.bean.CategoryChildBean;
 import com.nealyi.app.bean.NewGoodsBean;
 import com.nealyi.app.net.NetDao;
 import com.nealyi.app.net.OkHttpUtils;
-import com.nealyi.app.utils.CommonUtils;
-import com.nealyi.app.utils.ConvertUtils;
-import com.nealyi.app.utils.L;
-import com.nealyi.app.utils.MFGT;
+import com.nealyi.app.utils.*;
 import com.nealyi.app.view.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -33,8 +30,6 @@ import java.util.ArrayList;
  */
 public class CategoryChildActivity extends BaseActivity {
 
-    @BindView(R.id.tv_common_title)
-    TextView mTvCommonTitle;
     @BindView(R.id.tv_refresh)
     TextView mTvRefresh;
     @BindView(R.id.recyclerView)
@@ -43,27 +38,37 @@ public class CategoryChildActivity extends BaseActivity {
     LinearLayout mLinearLayout;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout mRefreshLayout;
+
     @BindView(R.id.btn_sort_price)
     Button mBtnSortPrice;
     @BindView(R.id.btn_sort_addtime)
     Button mBtnSortAddtime;
+
+    @BindView(R.id.btnCatChildFilter)
+    CatChildFilterButton mBtnCatChildFilter;
 
     CategoryChildBean mCategoryChildBean;
     CategoryChildActivity mContext;
     int pageId = 1;
     GoodsAdapter mAdapter;
     GridLayoutManager mGridLayoutManager;
-    ArrayList<NewGoodsBean> mList;
 
+    ArrayList<NewGoodsBean> mList;
     boolean addTimeAsc = false;
     boolean priceAsc = false;
     int sortBy = I.SORT_BY_ADDTIME_DESC;
 
+    String groupName;
+    ArrayList<CategoryChildBean> mChildList;
+
     @Override
+
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_category_child);
         ButterKnife.bind(this);
-        mCategoryChildBean = (CategoryChildBean) getIntent().getSerializableExtra(I.Boutique.CAT_ID);
+        mCategoryChildBean = (CategoryChildBean) getIntent().getSerializableExtra(I.CategoryChild.CAT_ID);
+        groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        mChildList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.ID);
         if (mCategoryChildBean == null) {
             finish();
         }
@@ -86,7 +91,7 @@ public class CategoryChildActivity extends BaseActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(12));
-        mTvCommonTitle.setText(mCategoryChildBean.getName());
+        mBtnCatChildFilter.setText(groupName);
     }
 
     @Override
@@ -168,6 +173,7 @@ public class CategoryChildActivity extends BaseActivity {
     @Override
     protected void initData() {
         downloadNewGoods(I.ACTION_DOWNLOAD);
+        mBtnCatChildFilter.setOnCatFilterClickListener(groupName,mChildList);
     }
 
     @OnClick(R.id.backClickArea)
@@ -188,7 +194,7 @@ public class CategoryChildActivity extends BaseActivity {
                     arrow = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
                 priceAsc = !priceAsc;
-                arrow.setBounds(0,0,arrow.getIntrinsicWidth(),arrow.getIntrinsicHeight());
+                arrow.setBounds(0, 0, arrow.getIntrinsicWidth(), arrow.getIntrinsicHeight());
                 mBtnSortPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, arrow, null);
                 break;
             case R.id.btn_sort_addtime:
