@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by nealyi on 16/10/20.
  */
-public class CategoryChildActivity extends BaseActivity{
+public class CategoryChildActivity extends BaseActivity {
 
     @BindView(R.id.tv_common_title)
     TextView mTvCommonTitle;
@@ -41,6 +42,10 @@ public class CategoryChildActivity extends BaseActivity{
     LinearLayout mLinearLayout;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.btn_sort_price)
+    Button mBtnSortPrice;
+    @BindView(R.id.btn_sort_addtime)
+    Button mBtnSortAddtime;
 
     CategoryChildBean mCategoryChildBean;
     CategoryChildActivity mContext;
@@ -49,9 +54,13 @@ public class CategoryChildActivity extends BaseActivity{
     GridLayoutManager mGridLayoutManager;
     ArrayList<NewGoodsBean> mList;
 
+    boolean addTimeAsc = false;
+    boolean priceAsc = false;
+    int sortBy = I.SORT_BY_ADDTIME_DESC;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.activity_boutique_child);
+        setContentView(R.layout.activity_category_child);
         ButterKnife.bind(this);
         mCategoryChildBean = (CategoryChildBean) getIntent().getSerializableExtra(I.Boutique.CAT_ID);
         if (mCategoryChildBean == null) {
@@ -59,7 +68,7 @@ public class CategoryChildActivity extends BaseActivity{
         }
         mContext = this;
         mList = new ArrayList<>();
-        mAdapter = new GoodsAdapter(mContext,mList);
+        mAdapter = new GoodsAdapter(mContext, mList);
         super.onCreate(savedInstanceState);
     }
 
@@ -76,6 +85,7 @@ public class CategoryChildActivity extends BaseActivity{
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(12));
+        mTvCommonTitle.setText(mCategoryChildBean.getName());
     }
 
     @Override
@@ -162,5 +172,28 @@ public class CategoryChildActivity extends BaseActivity{
     @OnClick(R.id.backClickArea)
     public void onClick() {
         MFGT.finish(this);
+    }
+
+    @OnClick({R.id.btn_sort_price, R.id.btn_sort_addtime})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_sort_price:
+                if (priceAsc) {
+                    sortBy = I.SORT_BY_PRICE_ASC;
+                } else {
+                    sortBy = I.SORT_BY_PRICE_DESC;
+                }
+                priceAsc = !priceAsc;
+                break;
+            case R.id.btn_sort_addtime:
+                if (addTimeAsc) {
+                    sortBy = I.SORT_BY_ADDTIME_ASC;
+                } else {
+                    sortBy = I.SORT_BY_ADDTIME_DESC;
+                }
+                addTimeAsc = !addTimeAsc;
+                break;
+        }
+        mAdapter.setSortBy(sortBy);
     }
 }

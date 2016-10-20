@@ -62,7 +62,7 @@ public class BoutiqueChildActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        setPullUpListener();
+//        setPullUpListener();
         setPullDownListener();
     }
 
