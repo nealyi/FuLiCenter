@@ -4,17 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.nealyi.app.R;
 import com.nealyi.app.fragment.BoutiqueFragment;
+import com.nealyi.app.fragment.CategoryFragment;
 import com.nealyi.app.fragment.NewGoodsFragment;
 
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.new_good)
@@ -34,6 +32,7 @@ public class MainActivity extends BaseActivity {
     Fragment[] mFragment;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +56,17 @@ public class MainActivity extends BaseActivity {
         mFragment = new Fragment[5];
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
+        mCategoryFragment = new CategoryFragment();
         mFragment[0] = mNewGoodsFragment;
         mFragment[1] = mBoutiqueFragment;
+        mFragment[2] = mCategoryFragment;
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.fragment_container, mNewGoodsFragment)
                 .add(R.id.fragment_container,mBoutiqueFragment)
+                .add(R.id.fragment_container,mCategoryFragment)
                 .hide(mBoutiqueFragment)
+                .hide(mCategoryFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }

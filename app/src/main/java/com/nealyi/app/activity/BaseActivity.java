@@ -17,11 +17,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         setListener();
     }
 
-    protected abstract void setListener();
+    protected abstract void initView();
 
     protected abstract void initData();
 
-    protected abstract void initView();
+    protected abstract void setListener();
 
     @Override
     public void onBackPressed() {
