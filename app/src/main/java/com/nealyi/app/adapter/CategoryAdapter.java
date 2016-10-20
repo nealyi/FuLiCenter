@@ -5,13 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.CategoryChildBean;
 import com.nealyi.app.bean.CategoryGroupBean;
 import com.nealyi.app.utils.ImageLoader;
+import com.nealyi.app.utils.L;
+import com.nealyi.app.utils.MFGT;
 
 import java.util.ArrayList;
 
@@ -98,10 +102,17 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        CategoryChildBean childBean = (CategoryChildBean) getChild(groupPosition, childPosition);
+        final CategoryChildBean childBean = (CategoryChildBean) getChild(groupPosition, childPosition);
         if (childBean != null) {
             ImageLoader.downloadImg(mContext, holder.mIvChildThumb, childBean.getImageUrl());
             holder.mTvChildName.setText(childBean.getName());
+            holder.mRlCategoryChild.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    L.e("CategoryAdapter="+childBean.toString());
+                    MFGT.gotoCategoryChildActivity(mContext,childBean);
+                }
+            });
         }
         return convertView;
     }
@@ -141,6 +152,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         ImageView mIvChildThumb;
         @BindView(R.id.tv_child_name)
         TextView mTvChildName;
+        @BindView(R.id.rl_category_child)
+        RelativeLayout mRlCategoryChild;
 
         ChildViewHolder(View view) {
             ButterKnife.bind(this, view);

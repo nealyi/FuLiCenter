@@ -43,8 +43,18 @@ public class NetDao {
     public static void downloadCategoryChild(Context context, int parentId, OkHttpUtils.OnCompleteListener<CategoryChildBean[]> listener) {
         OkHttpUtils<CategoryChildBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
-                .addParam(I.CategoryChild.PARENT_ID, String.valueOf(parentId))
+                .addParam(I.CategoryChild.PARENT_ID,String.valueOf(parentId))
                 .targetClass(CategoryChildBean[].class)
+                .execute(listener);
+    }
+
+    public static void downloadCategoryChildGoods(Context context, int catId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
+        OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
+                .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(catId))
+                .addParam(I.PAGE_ID, String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
+                .targetClass(NewGoodsBean[].class)
                 .execute(listener);
     }
 }
