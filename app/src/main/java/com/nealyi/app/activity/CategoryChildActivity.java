@@ -1,5 +1,6 @@
 package com.nealyi.app.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -176,22 +177,31 @@ public class CategoryChildActivity extends BaseActivity {
 
     @OnClick({R.id.btn_sort_price, R.id.btn_sort_addtime})
     public void onClick(View view) {
+        Drawable arrow;
         switch (view.getId()) {
             case R.id.btn_sort_price:
                 if (priceAsc) {
                     sortBy = I.SORT_BY_PRICE_ASC;
+                    arrow = getResources().getDrawable(R.mipmap.arrow_order_up);
                 } else {
                     sortBy = I.SORT_BY_PRICE_DESC;
+                    arrow = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
                 priceAsc = !priceAsc;
+                arrow.setBounds(0,0,arrow.getIntrinsicWidth(),arrow.getIntrinsicHeight());
+                mBtnSortPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, arrow, null);
                 break;
             case R.id.btn_sort_addtime:
                 if (addTimeAsc) {
                     sortBy = I.SORT_BY_ADDTIME_ASC;
+                    arrow = getResources().getDrawable(R.mipmap.arrow_order_up);
                 } else {
                     sortBy = I.SORT_BY_ADDTIME_DESC;
+                    arrow = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
                 addTimeAsc = !addTimeAsc;
+                arrow.setBounds(0, 0, arrow.getIntrinsicWidth(), arrow.getIntrinsicHeight());
+                mBtnSortAddtime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, arrow, null);
                 break;
         }
         mAdapter.setSortBy(sortBy);
