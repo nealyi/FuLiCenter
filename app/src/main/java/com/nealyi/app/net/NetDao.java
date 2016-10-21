@@ -3,6 +3,7 @@ package com.nealyi.app.net;
 import android.content.Context;
 import com.nealyi.app.I;
 import com.nealyi.app.bean.*;
+import com.nealyi.app.utils.MD5;
 
 /**
  * Created by nealyi on 16/10/17.
@@ -56,5 +57,20 @@ public class NetDao {
                 .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(NewGoodsBean[].class)
                 .execute(listener);
+    }
+
+    public static void register(Context context, String username, String nickname, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
+        OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_REGISTER)
+                .addParam(I.User.USER_NAME, username)
+                .addParam(I.User.NICK, nickname)
+                .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
+                .targetClass(Result.class)
+                .post()
+                .execute(listener);
+    }
+
+    public static void login(Context context, String username, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
+
     }
 }

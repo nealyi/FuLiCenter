@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
-import com.nealyi.app.activity.BoutiqueChildActivity;
-import com.nealyi.app.activity.CategoryChildActivity;
-import com.nealyi.app.activity.GoodsDetailActivity;
-import com.nealyi.app.activity.MainActivity;
+import com.nealyi.app.activity.*;
 import com.nealyi.app.bean.BoutiqueBean;
 import com.nealyi.app.bean.CategoryChildBean;
 
@@ -57,4 +54,24 @@ public class MFGT {
         intent.putExtra(I.CategoryChild.ID, list);
         startActivity(context, intent);
     }
+
+    public static void gotoLogin(Activity context) {
+        Intent intent = new Intent();
+        intent.setClass(context, LoginActivity.class);
+        startActivity(context, intent);
+    }
+
+    public static void gotoRegisterActivity(Activity context) {
+        Intent intent = new Intent();
+        intent.setClass(context, RegisterActivity.class);
+        startActivityForResult(context,intent,I.REQUEST_CODE_REGISTER);
+    }
+
+    private static void startActivityForResult(Activity context, Intent intent, int requestCode) {
+        context.startActivityForResult(intent,requestCode);
+        context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
+    }
+
+
+
 }

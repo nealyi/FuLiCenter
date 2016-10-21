@@ -150,7 +150,7 @@ public class CatChildFilterButton extends Button {
                     Intent intent = new Intent(mContext, CategoryChildActivity.class);
 //                    intent.putExtra(I.CategoryChild.CAT_ID, child.getId());
                     intent.putExtra(I.CategoryChild.CAT_ID, child);
-                    intent.putExtra("childList", Children);
+//                    intent.putExtra("childList", Children);
                     intent.putExtra(I.CategoryChild.ID, Children);//fix bug one
                     intent.putExtra(I.CategoryGroup.NAME, mbtnTop.getText().toString());
                     mContext.startActivity(intent);
