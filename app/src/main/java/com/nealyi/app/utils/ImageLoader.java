@@ -15,6 +15,7 @@ import java.net.URLEncoder;
 
 import com.nealyi.app.I;
 import com.nealyi.app.R;
+import com.nealyi.app.bean.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -356,6 +357,23 @@ public class ImageLoader {
                 .defaultPicture(R.drawable.nopic)
                 .imageView(imageView)
                 .setDragging(isDragging)
+                .showImage(context);
+    }
+
+    public static String getAvatarUrl(User user) {
+        if (user != null) {
+            String url = I.DOWNLOAD_AVATAR_URL + I.NAME_OR_HXID + "=" + user.getMuserName()
+                    + I.AND + I.AVATAR_TYPE + "=" + user.getMavatarPath() + I.AND + I.AVATAR_SUFFIX
+                    + "=" + user.getMavatarSuffix() + I.AND + "width=200&height=200";
+            L.e("useravater=" + url);
+            return url;
+        }
+        return null;
+    }
+    public static void setAvatar(String url, Context context, ImageView imageView) {
+        ImageLoader.build(url)
+                .defaultPicture(R.drawable.nopic)
+                .imageView(imageView)
                 .showImage(context);
     }
 }

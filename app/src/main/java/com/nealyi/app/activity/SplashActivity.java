@@ -7,7 +7,12 @@ import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import com.nealyi.app.FuLiCenterApplication;
 import com.nealyi.app.R;
+import com.nealyi.app.bean.User;
+import com.nealyi.app.dao.SharedPreferencesUtils;
+import com.nealyi.app.dao.UserDao;
+import com.nealyi.app.utils.L;
 import com.nealyi.app.utils.MFGT;
 
 /**
@@ -15,11 +20,13 @@ import com.nealyi.app.utils.MFGT;
  */
 public class SplashActivity extends AppCompatActivity {
     private final long sleepTime = 2000;
+    SplashActivity mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        mContext = this;
     }
 
     @Override
@@ -41,6 +48,15 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                User user = FuLiCenterApplication.getUser();
+                L.e("fulicenter,user=" + user);
+                String username = SharedPreferencesUtils.getInstance(mContext).getUser();
+                L.e("fulicenter,username=" + username);
+                if (user == null) {
+                    UserDao dao = new UserDao(mContext);
+                    user = dao.getUser("");
+                    L.e("User="+user);
+                }
                 MFGT.gotoMainActivity(SplashActivity.this);
                 finish();
             }

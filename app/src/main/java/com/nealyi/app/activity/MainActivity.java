@@ -1,5 +1,6 @@
 package com.nealyi.app.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,14 +10,19 @@ import android.widget.RadioButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.nealyi.app.FuLiCenterApplication;
+import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.fragment.BoutiqueFragment;
 import com.nealyi.app.fragment.CategoryFragment;
 import com.nealyi.app.fragment.NewGoodsFragment;
+import com.nealyi.app.fragment.PersonalCenterFragment;
+import com.nealyi.app.utils.L;
 import com.nealyi.app.utils.MFGT;
 
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @BindView(R.id.new_good)
     RadioButton mLayoutNewGood;
     @BindView(R.id.boutique)
@@ -35,6 +41,7 @@ public class MainActivity extends BaseActivity {
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    PersonalCenterFragment mPersonalCenterFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +66,11 @@ public class MainActivity extends BaseActivity {
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
+        mPersonalCenterFragment = new PersonalCenterFragment();
         mFragment[0] = mNewGoodsFragment;
         mFragment[1] = mBoutiqueFragment;
         mFragment[2] = mCategoryFragment;
+        mFragment[4] = mPersonalCenterFragment;
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.fragment_container, mNewGoodsFragment)
@@ -98,7 +107,7 @@ public class MainActivity extends BaseActivity {
                 index = 3;
                 break;
             case R.id.personal_center:
-                if (FuLiCenterApplication.getUsername() == null) {
+                if (FuLiCenterApplication.getUser() == null) {
                     MFGT.gotoLogin(this);
                 } else {
                     index = 4;
@@ -112,9 +121,9 @@ public class MainActivity extends BaseActivity {
         if (index != currentIndex) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.hide(mFragment[currentIndex]);
-//            if (!mFragment[index].isAdded()) {
-//                transaction.add(R.id.fragment_container, mFragment[index]);
-//            }
+            if (!mFragment[index].isAdded()) {
+                transaction.add(R.id.fragment_container, mFragment[index]);
+            }
             transaction.show(mFragment[index]).commit();
         }
         setRadioButtonStatus();
@@ -134,5 +143,21 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        L.e(TAG,"onResume……");
+        setFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        L.e(TAG,"onActivityResult，requestCode = "+requestCode);
+        if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUser() != null) {
+            index = 4;
+        }
     }
 }

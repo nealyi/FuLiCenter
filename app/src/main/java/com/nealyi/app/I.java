@@ -51,6 +51,7 @@ public interface I {
     int CATEGORY_GOOD=1;
     int CAT_ID=0;
     int REQUEST_CODE_REGISTER = 101;
+    int REQUEST_CODE_LOGIN = 102;
 
     interface Goods {
         String KEY_RESULT = "result";
@@ -327,6 +328,8 @@ public interface I {
 
     /** 上传头像图片的类型：user_avatar或group_icon */
     String AVATAR_TYPE = "avatarType";
+
+    String AVATAR_SUFFIX = "m_avatar_suffix";
     /** 用户的账号或群组的环信id */
     String NAME_OR_HXID = "name_or_hxid";
     /** 客户端发送的获取服务端状态的请求 */
@@ -416,5 +419,7 @@ public interface I {
     /** 下载精选首页图像的接口*/
     String DOWNLOAD_IMG_URL= I.SERVER_ROOT+
             REQUEST_DOWNLOAD_IMAGE+I.QUESTION+ IMAGE_URL+"=";
+
+    String DOWNLOAD_AVATAR_URL = I.SERVER_ROOT + REQUEST_DOWNLOAD_AVATAR + I.QUESTION;
 
 }

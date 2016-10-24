@@ -3,7 +3,7 @@ package com.nealyi.app.bean;
 /**
  * Created by nealyi on 16/10/21.
  */
-public class UserBean {
+public class User {
     private String muserName;
 
     private String muserNick;
@@ -18,7 +18,10 @@ public class UserBean {
 
     private String mavatarLastUpdateTime;
 
-    public UserBean(String muserName, String muserNick, int mavatarId, String mavatarPath, String mavatarSuffix, int mavatarType, String mavatarLastUpdateTime) {
+    public User() {
+    }
+
+    public User(String muserName, String muserNick, int mavatarId, String mavatarPath, String mavatarSuffix, int mavatarType, String mavatarLastUpdateTime) {
         this.muserName = muserName;
         this.muserNick = muserNick;
         this.mavatarId = mavatarId;
@@ -86,7 +89,7 @@ public class UserBean {
 
     @Override
     public String toString() {
-        return "UserBean{" +
+        return "User{" +
                 "muserName='" + muserName + '\'' +
                 ", muserNick='" + muserNick + '\'' +
                 ", mavatarId=" + mavatarId +

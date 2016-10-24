@@ -3,8 +3,6 @@ package com.nealyi.app.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,10 +10,13 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.nealyi.app.FuLiCenterApplication;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.Result;
-import com.nealyi.app.bean.UserBean;
+import com.nealyi.app.bean.User;
+import com.nealyi.app.dao.SharedPreferencesUtils;
+import com.nealyi.app.dao.UserDao;
 import com.nealyi.app.net.NetDao;
 import com.nealyi.app.net.OkHttpUtils;
 import com.nealyi.app.utils.CommonUtils;
@@ -87,19 +88,30 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void Login() {
-        ProgressDialog pd = new ProgressDialog(mContext);
+        final ProgressDialog pd = new ProgressDialog(mContext);
         pd.setMessage(getResources().getString(R.string.logining));
         pd.show();
-        NetDao.login(mContext, username, password, new OkHttpUtils.OnCompleteListener<Result>() {
+        NetDao.login(mContext, username, password, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
-            public void onSuccess(Result result) {
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, User.class);
                 L.e(TAG, "result=" + result);
                 if (result == null) {
                     CommonUtils.showShortToast(R.string.login_fail);
                 } else {
                     if (result.isRetMsg()) {
+                        User user = (User) result.getRetData();
                         L.e(TAG, "result.getRetData=" + result.getRetCode());
-//                        ResultUtils.getResultFromJson((String) result.getRetData(), UserBean.class);
+                        UserDao dao = new UserDao(mContext);
+                        boolean isSuccess = dao.saveUser(user);
+                        if (isSuccess) {
+                            SharedPreferencesUtils.getInstance(mContext).saveUser(user.getMuserName());
+                            FuLiCenterApplication.setUser(user);
+                            MFGT.finish(mContext);
+                        } else {
+                            CommonUtils.showShortToast(R.string.user_database_error);
+                        }
+//                        ResultUtils.getResultFromJson((String) result.getRetData(), User.class);
                     } else {
                         if (result.getRetCode() == I.MSG_LOGIN_UNKNOW_USER) {
                             CommonUtils.showShortToast(R.string.login_fail_unknow_user);
@@ -110,7 +122,7 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 }
-
+                pd.dismiss();
             }
 
             @Override

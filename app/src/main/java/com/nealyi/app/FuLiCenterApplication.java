@@ -1,6 +1,7 @@
 package com.nealyi.app;
 
 import android.app.Application;
+import com.nealyi.app.bean.User;
 
 /**
  * Created by nealyi on 16/10/17.
@@ -10,6 +11,16 @@ public class FuLiCenterApplication extends Application {
     private static FuLiCenterApplication instance;
 
     private static String username;
+
+    private static User user;
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        FuLiCenterApplication.user = user;
+    }
 
     public static String getUsername() {
         return username;
