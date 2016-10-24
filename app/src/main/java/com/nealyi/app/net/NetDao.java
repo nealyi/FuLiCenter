@@ -44,7 +44,7 @@ public class NetDao {
     public static void downloadCategoryChild(Context context, int parentId, OkHttpUtils.OnCompleteListener<CategoryChildBean[]> listener) {
         OkHttpUtils<CategoryChildBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
-                .addParam(I.CategoryChild.PARENT_ID,String.valueOf(parentId))
+                .addParam(I.CategoryChild.PARENT_ID, String.valueOf(parentId))
                 .targetClass(CategoryChildBean[].class)
                 .execute(listener);
     }
@@ -71,6 +71,11 @@ public class NetDao {
     }
 
     public static void login(Context context, String username, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
-
+        OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_LOGIN)
+                .addParam(I.User.USER_NAME, username)
+                .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
+                .targetClass(Result.class)
+                .execute(listener);
     }
 }

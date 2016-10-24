@@ -28,4 +28,8 @@
     <string name="title_activity_goods_detail">GoodsDetailActivity</string>
     <string name="title_activity_boutique_child">BoutiqueChildActivity</string>
     <string name="title_activity_category_child">CategoryChildActivity</string>
+    <string name="login_fail">login fail</string>
+    <string name="logining">logining</string>
+    <string name="login_fail_unknow_user">login fail unknow user</string>
+    <string name="login_fail_error_password">login fail error password</string>
 </resources>
