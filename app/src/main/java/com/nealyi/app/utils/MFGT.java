@@ -79,5 +79,9 @@ public class MFGT {
     }
 
 
-
+    public static void gotoUpdateNick(Activity context) {
+        Intent intent = new Intent();
+        intent.setClass(context, UpdateNickActivity.class);
+        startActivityForResult(context, intent, I.REQUEST_CODE_NICK);
+    }
 }

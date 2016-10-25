@@ -52,6 +52,7 @@ public interface I {
     int CAT_ID=0;
     int REQUEST_CODE_REGISTER = 101;
     int REQUEST_CODE_LOGIN = 102;
+    int REQUEST_CODE_NICK = 103;
 
     interface Goods {
         String KEY_RESULT = "result";

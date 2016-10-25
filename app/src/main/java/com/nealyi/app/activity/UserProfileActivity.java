@@ -1,5 +1,6 @@
 package com.nealyi.app.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,9 +10,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.nealyi.app.FuLiCenterApplication;
+import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.User;
 import com.nealyi.app.dao.SharedPreferencesUtils;
+import com.nealyi.app.utils.CommonUtils;
 import com.nealyi.app.utils.ImageLoader;
 import com.nealyi.app.utils.L;
 import com.nealyi.app.utils.MFGT;
@@ -50,13 +53,11 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     protected void initData() {
         user = FuLiCenterApplication.getUser();
-        if (user != null) {
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, mIvPersonalInformationAvatar);
-            mTvPersonalInformationName.setText(user.getMuserName());
-            mTvPersonalInformationNick.setText(user.getMuserNick());
-        } else {
+        if (user == null) {
             finish();
+            return;
         }
+        showInfo();
     }
 
     @Override
@@ -69,8 +70,10 @@ public class UserProfileActivity extends BaseActivity {
             case R.id.rl_personal_information_avatar:
                 break;
             case R.id.rl_personal_information_name:
+                CommonUtils.showLongToast(R.string.username_cannot_be_modify);
                 break;
             case R.id.rl_personal_information_nick:
+                MFGT.gotoUpdateNick(mContext);
                 break;
             case R.id.logout:
                 logout();
@@ -86,5 +89,28 @@ public class UserProfileActivity extends BaseActivity {
 //            MFGT.gotoLogin(mContext);
         }
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showInfo();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_NICK) {
+            CommonUtils.showLongToast(R.string.update_user_nick_success);
+        }
+    }
+
+    private void showInfo() {
+        user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, mIvPersonalInformationAvatar);
+            mTvPersonalInformationName.setText(user.getMuserName());
+            mTvPersonalInformationNick.setText(user.getMuserNick());
+        }
     }
 }

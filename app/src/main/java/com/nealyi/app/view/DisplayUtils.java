@@ -14,6 +14,7 @@ public class DisplayUtils {
         activity.findViewById(R.id.backClickArea).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                activity.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
                 activity.finish();
             }
         });

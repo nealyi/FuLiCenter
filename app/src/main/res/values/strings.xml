@@ -34,4 +34,10 @@
     <string name="login_fail_error_password">login fail error password</string>
     <string name="user_database_error">user database error</string>
     <string name="user_profile">user profile</string>
+    <string name="nick_name_cannot_be_empty">nick name cannot be empty</string>
+    <string name="update_nick_fail_unmodify">update nick fail unmodify</string>
+    <string name="update_user_nick">update user nick</string>
+    <string name="update_fail">update fail</string>
+    <string name="username_cannot_be_modify">username cannot be modify</string>
+    <string name="update_user_nick_success">update user nick success</string>
 </resources>
