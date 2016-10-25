@@ -33,4 +33,5 @@
     <string name="login_fail_unknow_user">login fail unknow user</string>
     <string name="login_fail_error_password">login fail error password</string>
     <string name="user_database_error">user database error</string>
+    <string name="user_profile">user profile</string>
 </resources>

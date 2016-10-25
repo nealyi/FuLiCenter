@@ -27,4 +27,5 @@
     <string name="login_fail_unknow_user">登錄失敗，帳號不存在</string>
     <string name="login_fail_error_password">登錄失敗，用戶名或密碼錯誤</string>
     <string name="user_database_error">數據庫錯誤</string>
+    <string name="user_profile">个人资料</string>
 </resources>

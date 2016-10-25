@@ -19,6 +19,8 @@ import com.nealyi.app.utils.MFGT;
  * Created by nealyi on 16/10/14.
  */
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = SplashActivity.class.getSimpleName();
+
     private final long sleepTime = 2000;
     SplashActivity mContext;
 
@@ -49,13 +51,16 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 User user = FuLiCenterApplication.getUser();
-                L.e("fulicenter,user=" + user);
+                L.e(TAG, "fulicenter,user=" + user);
                 String username = SharedPreferencesUtils.getInstance(mContext).getUser();
-                L.e("fulicenter,username=" + username);
-                if (user == null) {
+                L.e(TAG, "fulicenter,username=" + username);
+                if (user == null && username != null) {
                     UserDao dao = new UserDao(mContext);
-                    user = dao.getUser("");
-                    L.e("User="+user);
+                    user = dao.getUser(username);
+                    L.e(TAG, "User=" + user);
+                    if (user != null) {
+                        FuLiCenterApplication.setUser(user);
+                    }
                 }
                 MFGT.gotoMainActivity(SplashActivity.this);
                 finish();

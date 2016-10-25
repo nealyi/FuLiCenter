@@ -74,8 +74,8 @@ public class MainActivity extends BaseActivity {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.fragment_container, mNewGoodsFragment)
-                .add(R.id.fragment_container,mBoutiqueFragment)
-                .add(R.id.fragment_container,mCategoryFragment)
+                .add(R.id.fragment_container, mBoutiqueFragment)
+                .add(R.id.fragment_container, mCategoryFragment)
                 .hide(mBoutiqueFragment)
                 .hide(mCategoryFragment)
                 .show(mNewGoodsFragment)
@@ -124,7 +124,8 @@ public class MainActivity extends BaseActivity {
             if (!mFragment[index].isAdded()) {
                 transaction.add(R.id.fragment_container, mFragment[index]);
             }
-            transaction.show(mFragment[index]).commit();
+//            transaction.show(mFragment[index]).commit();
+            transaction.show(mFragment[index]).commitAllowingStateLoss();
         }
         setRadioButtonStatus();
         currentIndex = index;
@@ -148,14 +149,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        L.e(TAG,"onResume……");
+        L.e(TAG, "onResume……");
+        if (index == 4 && FuLiCenterApplication.getUser() == null) {
+            L.e(TAG, "onResume index = 0");
+            index = 0;
+        }
         setFragment();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        L.e(TAG,"onActivityResult，requestCode = "+requestCode);
+        L.e(TAG, "onActivityResult，requestCode = " + requestCode);
         if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUser() != null) {
             index = 4;
         }
