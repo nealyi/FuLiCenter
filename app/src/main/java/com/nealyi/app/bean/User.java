@@ -1,5 +1,7 @@
 package com.nealyi.app.bean;
 
+import com.nealyi.app.I;
+
 /**
  * Created by nealyi on 16/10/21.
  */
@@ -68,7 +70,7 @@ public class User {
     }
 
     public String getMavatarSuffix() {
-        return this.mavatarSuffix;
+        return this.mavatarSuffix!=null?mavatarSuffix: I.AVATAR_SUFFIX_JPG;
     }
 
     public void setMavatarType(int mavatarType) {
