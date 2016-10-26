@@ -110,6 +110,9 @@ public class UserProfileActivity extends BaseActivity {
         if (resultCode != RESULT_OK) {
             return;
         }
+        if (data == null) {
+            return;
+        }
         mOnSetAvatarListener.setAvatar(requestCode, data, mIvPersonalInformationAvatar);
         if (requestCode == I.REQUEST_CODE_NICK) {
             CommonUtils.showLongToast(R.string.update_user_nick_success);
