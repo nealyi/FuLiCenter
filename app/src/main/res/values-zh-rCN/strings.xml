@@ -37,4 +37,6 @@
     <string name="update_user_avatar">更新用户头像</string>
     <string name="update_user_avatar_fail">更新用户头像失败</string>
     <string name="update_user_avatar_success">更新用户头像成功</string>
+    <string name="collect_title">收藏商品</string>
+    <string name="delete_collect_fail">删除失败</string>
 </resources>
