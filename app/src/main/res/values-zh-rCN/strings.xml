@@ -39,4 +39,9 @@
     <string name="update_user_avatar_success">更新用户头像成功</string>
     <string name="collect_title">收藏商品</string>
     <string name="delete_collect_fail">删除失败</string>
+    <string name="login_first">请先登录</string>
+    <string name="add_collect_success">收藏成功</string>
+    <string name="add_collect_fail">收藏失败</string>
+    <string name="remove_collect_success">取消收藏成功</string>
+    <string name="remove_collect_fail">取消收藏失败</string>
 </resources>

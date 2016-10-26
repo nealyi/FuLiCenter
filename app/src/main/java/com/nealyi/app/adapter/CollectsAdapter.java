@@ -154,7 +154,7 @@ public class CollectsAdapter extends Adapter {
                         mList.remove(goods);
                         notifyDataSetChanged();
                     } else {
-                        CommonUtils.showLongToast(result != null ? result.getMsg() :
+                        CommonUtils.showShortToast(result != null ? result.getMsg() :
                                 mContext.getResources().getString(R.string.delete_collect_fail));
                     }
                 }
@@ -162,7 +162,7 @@ public class CollectsAdapter extends Adapter {
                 @Override
                 public void onError(String error) {
                     L.e("error= " + error);
-                    CommonUtils.showLongToast(mContext.getResources().getString(R.string.delete_collect_fail));
+                    CommonUtils.showShortToast(mContext.getResources().getString(R.string.delete_collect_fail));
                 }
             });
         }

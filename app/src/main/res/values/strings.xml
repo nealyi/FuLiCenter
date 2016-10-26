@@ -45,4 +45,9 @@
     <string name="update_user_avatar_success">update user avatar success</string>
     <string name="collect_title">collect title</string>
     <string name="delete_collect_fail">delete collect fail</string>
+    <string name="login_first">login first</string>
+    <string name="add_collect_success">add collect success</string>
+    <string name="add_collect_fail">add collect fail</string>
+    <string name="remove_collect_success">remove collect success</string>
+    <string name="remove_collect_fail">remove collect fail</string>
 </resources>

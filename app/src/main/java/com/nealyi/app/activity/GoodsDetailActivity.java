@@ -1,17 +1,20 @@
 package com.nealyi.app.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.nealyi.app.FuLiCenterApplication;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.AlbumsBean;
 import com.nealyi.app.bean.GoodsDetailsBean;
+import com.nealyi.app.bean.MessageBean;
+import com.nealyi.app.bean.User;
 import com.nealyi.app.net.NetDao;
 import com.nealyi.app.net.OkHttpUtils;
 import com.nealyi.app.utils.CommonUtils;
@@ -38,9 +41,13 @@ public class GoodsDetailActivity extends BaseActivity {
     FlowIndicator mIndicator;
     @BindView(R.id.wv_good_brief)
     WebView mWvGoodBrief;
+    @BindView(R.id.iv_good_collect)
+    ImageView mIvGoodCollect;
 
     int goodsId;
     GoodsDetailActivity mContext;
+    boolean isCollected = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +94,7 @@ public class GoodsDetailActivity extends BaseActivity {
         mTvGoodName.setText(details.getGoodsName());
         mTvGoodPriceCurrent.setText(details.getCurrencyPrice());
         mTvGoodPriceShop.setText(details.getShopPrice());
-        mSalv.startPlayLoop(mIndicator,getAlbumImgUrl(details),getAlbumCount(details));
+        mSalv.startPlayLoop(mIndicator, getAlbumImgUrl(details), getAlbumCount(details));
         mWvGoodBrief.loadDataWithBaseURL(null, details.getGoodsBrief(), I.TEXT_HTML, I.UTF_8, null);
     }
 
@@ -117,5 +124,97 @@ public class GoodsDetailActivity extends BaseActivity {
     @OnClick(R.id.backClickArea)
     public void onBackClick() {
         MFGT.finish(this);
+    }
+
+    @OnClick(R.id.iv_good_collect)
+    public void onAddCollect() {
+        User user = FuLiCenterApplication.getUser();
+        if (user == null) {
+            CommonUtils.showLongToast(R.string.login_first);
+            MFGT.gotoLogin(mContext);
+            return;
+        }
+        isCollected = !isCollected;
+        if (isCollected) {
+            NetDao.addCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        CommonUtils.showShortToast(R.string.add_collect_success);
+                    } else {
+                        CommonUtils.showShortToast(R.string.add_collect_fail);
+                        isCollected = !isCollected;
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    L.e("error=" + error);
+                    CommonUtils.showShortToast(R.string.add_collect_fail);
+                    isCollected = !isCollected;
+                }
+            });
+        } else {
+            NetDao.deleteCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        CommonUtils.showShortToast(R.string.remove_collect_success);
+                    } else {
+                        CommonUtils.showShortToast(R.string.remove_collect_fail);
+                        isCollected = !isCollected;
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    L.e("error= " + error);
+                    CommonUtils.showShortToast(R.string.remove_collect_fail);
+                    isCollected = !isCollected;
+                }
+            });
+        }
+        updateGoodsCollectStatus();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        User user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            isCollected();
+        }
+    }
+
+    private void isCollected() {
+        User user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            NetDao.isCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        isCollected = true;
+                    } else {
+                        isCollected = false;
+                    }
+                    updateGoodsCollectStatus();
+                }
+
+                @Override
+                public void onError(String error) {
+                    isCollected = false;
+                    updateGoodsCollectStatus();
+                }
+            });
+        }
+        updateGoodsCollectStatus();
+    }
+
+    private void updateGoodsCollectStatus() {
+        if (isCollected) {
+            mIvGoodCollect.setImageResource(R.mipmap.bg_collect_out);
+        } else {
+            mIvGoodCollect.setImageResource(R.mipmap.bg_collect_in);
+        }
     }
 }
