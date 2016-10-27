@@ -202,6 +202,8 @@ public class CartFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             L.e(TAG, "updateCartReceiver……");
             sumPrice();
+            // FIXME: 16/10/27 bug
+            setCartLayout(mList != null && mList.size() > 0);
         }
     }
 

@@ -55,7 +55,7 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
             holder.mTvCartGoodPrice.setText(goods.getCurrencyPrice());
         }
         holder.mTvCartGoodCount.setText(String.valueOf(cartBean.getCount()));
-        holder.mIvCheckbox.setChecked(false);
+        holder.mIvCheckbox.setChecked(cartBean.isChecked());
         holder.mIvCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -124,14 +124,18 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
 
         @OnClick(R.id.iv_del_cart)
         public void onDelCart() {
-            int position = (int) mTvCartGoodCount.getTag();
-            int cardId = mList.get(position).getId();
-            final int count = mList.get(position).getCount();
-            if (count > 1) {
-                NetDao.updateCart(mContext, cardId, count - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            final int position = (int) mIvAddCart.getTag();
+            CartBean cartBean = mList.get(position);
+
+            if (cartBean.getCount() > 1) {
+                NetDao.updateCart(mContext, cartBean.getId(), cartBean.getCount() - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean result) {
-                        mTvCartGoodCount.setText(count - 1);
+                        if (result != null && result.isSuccess()) {
+                            mList.get(position).setCount(mList.get(position).getCount() - 1);
+                            mContext.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                            mTvCartGoodCount.setText(String.valueOf(mList.get(position).getCount()));
+                        }
                     }
 
                     @Override
@@ -140,7 +144,21 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
                     }
                 });
             } else {
+                NetDao.deleteCart(mContext, cartBean.getId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            mList.remove(position);
+                            mContext.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                            notifyDataSetChanged();
+                        }
+                    }
 
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
             }
         }
     }
