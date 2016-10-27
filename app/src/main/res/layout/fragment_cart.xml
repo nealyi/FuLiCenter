@@ -1,10 +1,57 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/fragment_cart"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.nealyi.app.fragment.CartFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/fragment_cart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.nealyi.app.fragment.CartFragment">
 
     <include layout="@layout/fragment_refresh"/>
+    <TextView
+            android:id="@+id/tv_cart_empty"
+            android:layout_centerInParent="true"
+            android:text="你的购物车空的!快去剁手吧!"
+            android:textSize="20sp"
+            android:textColor="@color/orange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-</FrameLayout>
+    <RelativeLayout
+            android:id="@+id/rl_price_count"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+        <Button
+                android:id="@+id/btn_cleaning"
+                android:background="@color/main_orange"
+                android:text="结算"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+        <TextView
+                android:id="@+id/tv_cart_sum_price"
+                android:text="合计：¥888.00"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/tv_cart_save_price"
+                android:text="节省：¥666.00"
+                android:textSize="16sp"
+                android:layout_marginTop="32dp"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/main_orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,19 +1,26 @@
 package com.nealyi.app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.nealyi.app.I;
 import com.nealyi.app.R;
 import com.nealyi.app.bean.CartBean;
 import com.nealyi.app.bean.GoodsDetailsBean;
+import com.nealyi.app.bean.MessageBean;
+import com.nealyi.app.net.NetDao;
+import com.nealyi.app.net.OkHttpUtils;
 import com.nealyi.app.utils.ImageLoader;
 
 import java.util.ArrayList;
@@ -27,8 +34,7 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
 
     public CartAdapter(Context context, ArrayList<CartBean> list) {
         mContext = context;
-        mList = new ArrayList<>();
-        mList.addAll(list);
+        mList = list;
     }
 
 
@@ -41,7 +47,7 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-        CartBean cartBean = mList.get(position);
+        final CartBean cartBean = mList.get(position);
         GoodsDetailsBean goods = cartBean.getGoods();
         if (goods != null) {
             ImageLoader.downloadImg(mContext, holder.mIvGoodsThumb, goods.getGoodsThumb());
@@ -49,6 +55,15 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
             holder.mTvCartGoodPrice.setText(goods.getCurrencyPrice());
         }
         holder.mTvCartGoodCount.setText(String.valueOf(cartBean.getCount()));
+        holder.mIvCheckbox.setChecked(false);
+        holder.mIvCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cartBean.setChecked(isChecked);
+                mContext.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+            }
+        });
+//        holder.mTvCartGoodCount.setTag(I.ACTION_UPDATE_CART, position);
     }
 
 
@@ -59,10 +74,7 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
 
 
     public void initData(ArrayList<CartBean> list) {
-        if (mList != null) {
-            mList.clear();
-        }
-        mList.addAll(list);
+        mList = list;
         notifyDataSetChanged();
     }
 
@@ -87,5 +99,45 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
             super(view);
             ButterKnife.bind(this, view);
         }
+
+//        @OnClick(R.id.iv_add_cart)
+//        public void onAddCart() {
+//            int position = (int) mTvCartGoodCount.getTag();
+//            int cartId = mList.get(position).getId();
+//            final int count = mList.get(position).getCount();
+//            NetDao.updateCart(mContext, cartId, count + 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+//                @Override
+//                public void onSuccess(MessageBean result) {
+//                    mTvCartGoodCount.setText(count + 1);
+//                }
+//
+//                @Override
+//                public void onError(String error) {
+//
+//                }
+//            });
+//        }
+//
+//        @OnClick(R.id.iv_del_cart)
+//        public void onDelCart() {
+//            int position = (int) mTvCartGoodCount.getTag();
+//            int cardId = mList.get(position).getId();
+//            final int count = mList.get(position).getCount();
+//            if (count > 1) {
+//                NetDao.updateCart(mContext, cardId, count - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+//                    @Override
+//                    public void onSuccess(MessageBean result) {
+//                        mTvCartGoodCount.setText(count - 1);
+//                    }
+//
+//                    @Override
+//                    public void onError(String error) {
+//
+//                    }
+//                });
+//            } else {
+//
+//            }
+//        }
     }
 }
