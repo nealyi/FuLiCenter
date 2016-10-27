@@ -63,7 +63,7 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
                 mContext.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
             }
         });
-//        holder.mTvCartGoodCount.setTag(I.ACTION_UPDATE_CART, position);
+        holder.mIvAddCart.setTag(position);
     }
 
 
@@ -100,44 +100,48 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
             ButterKnife.bind(this, view);
         }
 
-//        @OnClick(R.id.iv_add_cart)
-//        public void onAddCart() {
-//            int position = (int) mTvCartGoodCount.getTag();
-//            int cartId = mList.get(position).getId();
-//            final int count = mList.get(position).getCount();
-//            NetDao.updateCart(mContext, cartId, count + 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
-//                @Override
-//                public void onSuccess(MessageBean result) {
-//                    mTvCartGoodCount.setText(count + 1);
-//                }
-//
-//                @Override
-//                public void onError(String error) {
-//
-//                }
-//            });
-//        }
-//
-//        @OnClick(R.id.iv_del_cart)
-//        public void onDelCart() {
-//            int position = (int) mTvCartGoodCount.getTag();
-//            int cardId = mList.get(position).getId();
-//            final int count = mList.get(position).getCount();
-//            if (count > 1) {
-//                NetDao.updateCart(mContext, cardId, count - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
-//                    @Override
-//                    public void onSuccess(MessageBean result) {
-//                        mTvCartGoodCount.setText(count - 1);
-//                    }
-//
-//                    @Override
-//                    public void onError(String error) {
-//
-//                    }
-//                });
-//            } else {
-//
-//            }
-//        }
+        @OnClick(R.id.iv_add_cart)
+        public void onAddCart() {
+            final int position = (int) mIvAddCart.getTag();
+            CartBean cartBean = mList.get(position);
+
+            NetDao.updateCart(mContext, cartBean.getId(), cartBean.getCount() + 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        mList.get(position).setCount(mList.get(position).getCount() + 1);
+                        mContext.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                        mTvCartGoodCount.setText(String.valueOf(mList.get(position).getCount()));
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
+
+        @OnClick(R.id.iv_del_cart)
+        public void onDelCart() {
+            int position = (int) mTvCartGoodCount.getTag();
+            int cardId = mList.get(position).getId();
+            final int count = mList.get(position).getCount();
+            if (count > 1) {
+                NetDao.updateCart(mContext, cardId, count - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        mTvCartGoodCount.setText(count - 1);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            } else {
+
+            }
+        }
     }
 }

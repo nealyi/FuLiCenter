@@ -54,7 +54,6 @@ public interface I {
     int REQUEST_CODE_LOGIN = 102;
     int REQUEST_CODE_NICK = 103;
     int REQUEST_CODE_LOGIN_FROM_CART = 104;
-    int ACTION_UPDATE_CART = 105;
     String BROADCAST_UPDATE_CART = "com.nealyi.fulicenter.update.cart";
 
     interface Goods {

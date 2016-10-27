@@ -179,7 +179,7 @@ public class NetDao {
         utils.setRequestUrl(I.REQUEST_UPDATE_CART)
                 .addParam(I.Cart.ID, String.valueOf(cartId))
                 .addParam(I.Cart.COUNT, String.valueOf(count))
-                .addParam(I.Cart.IS_CHECKED, "0")
+                .addParam(I.Cart.IS_CHECKED, String.valueOf(0))
                 .targetClass(MessageBean.class)
                 .execute(listener);
     }
