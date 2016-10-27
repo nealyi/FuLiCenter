@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:gravity="center_vertical"
+              android:background="@color/white"
+              android:layout_marginTop="2dp"
+              android:layout_width="match_parent"
+              android:layout_height="100dp">
+
+
+    <CheckBox
+            android:id="@+id/iv_checkbox"
+            android:layout_marginLeft="10dp"
+            style="@style/CustomCheckboxTheme"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/iv_goods_thumb"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/goods_thumb"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+
+    <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/tv_cart_good_name"
+                android:text="军大衣"
+                android:paddingTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="12sp"
+                android:textColor="@color/orange"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/iv_add_cart"
+                    android:padding="8dp"
+                    android:src="@mipmap/add_cart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tv_cart_good_count"
+                    android:text="1"
+                    android:padding="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <ImageView
+                    android:id="@+id/iv_del_cart"
+                    android:padding="8dp"
+                    android:src="@mipmap/del_cart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/tv_cart_good_price"
+            android:text="$500"
+            android:textSize="16sp"
+            android:textColor="@color/orange"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

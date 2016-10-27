@@ -12,10 +12,7 @@ import butterknife.ButterKnife;
 import com.nealyi.app.FuLiCenterApplication;
 import com.nealyi.app.I;
 import com.nealyi.app.R;
-import com.nealyi.app.fragment.BoutiqueFragment;
-import com.nealyi.app.fragment.CategoryFragment;
-import com.nealyi.app.fragment.NewGoodsFragment;
-import com.nealyi.app.fragment.PersonalCenterFragment;
+import com.nealyi.app.fragment.*;
 import com.nealyi.app.utils.L;
 import com.nealyi.app.utils.MFGT;
 
@@ -41,6 +38,7 @@ public class MainActivity extends BaseActivity {
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    CartFragment mCartFragment;
     PersonalCenterFragment mPersonalCenterFragment;
 
     @Override
@@ -66,18 +64,20 @@ public class MainActivity extends BaseActivity {
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
+        mCartFragment = new CartFragment();
         mPersonalCenterFragment = new PersonalCenterFragment();
         mFragment[0] = mNewGoodsFragment;
         mFragment[1] = mBoutiqueFragment;
         mFragment[2] = mCategoryFragment;
+        mFragment[3] = mCartFragment;
         mFragment[4] = mPersonalCenterFragment;
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.fragment_container, mNewGoodsFragment)
-                .add(R.id.fragment_container, mBoutiqueFragment)
-                .add(R.id.fragment_container, mCategoryFragment)
-                .hide(mBoutiqueFragment)
-                .hide(mCategoryFragment)
+//                .add(R.id.fragment_container, mBoutiqueFragment)
+//                .add(R.id.fragment_container, mCategoryFragment)
+//                .hide(mBoutiqueFragment)
+//                .hide(mCategoryFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
@@ -104,7 +104,11 @@ public class MainActivity extends BaseActivity {
                 index = 2;
                 break;
             case R.id.cart:
-                index = 3;
+                if (FuLiCenterApplication.getUser() == null) {
+                    MFGT.gotoLoginFromCart(this);
+                } else {
+                    index = 3;
+                }
                 break;
             case R.id.personal_center:
                 if (FuLiCenterApplication.getUser() == null) {
@@ -161,8 +165,15 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         L.e(TAG, "onActivityResult，requestCode = " + requestCode);
-        if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUser() != null) {
-            index = 4;
+        if (FuLiCenterApplication.getUser() != null) {
+            if (requestCode == I.REQUEST_CODE_LOGIN) {
+                index = 4;
+            }
+            if (requestCode == I.REQUEST_CODE_LOGIN_FROM_CART) {
+                index = 3;
+            }
         }
     }
+
+
 }

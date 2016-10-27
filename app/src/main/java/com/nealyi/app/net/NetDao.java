@@ -153,4 +153,25 @@ public class NetDao {
                 .targetClass(MessageBean.class)
                 .execute(listener);
     }
+
+    public static void downloadCart(Context context, String username, OkHttpUtils.OnCompleteListener<CartBean[]> listener) {
+        OkHttpUtils<CartBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CARTS)
+                .addParam(I.Cart.USER_NAME, username)
+                .targetClass(CartBean[].class)
+                .execute(listener);
+    }
+
+    public static void addCart(Context context, String username, int goodId, int count, boolean isChecked, OkHttpUtils.OnCompleteListener<CartBean> listener) {
+        OkHttpUtils<CartBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_ADD_CART)
+                .addParam(I.Cart.GOODS_ID, String.valueOf(goodId))
+                .addParam(I.Cart.USER_NAME, username)
+                .addParam(I.Cart.COUNT, String.valueOf(count))
+                .addParam(I.Cart.IS_CHECKED, String.valueOf(isChecked))
+                .targetClass(CartBean.class)
+                .execute(listener);
+
+    }
+
 }
