@@ -50,4 +50,7 @@
     <string name="add_collect_fail">add collect fail</string>
     <string name="remove_collect_success">remove collect success</string>
     <string name="remove_collect_fail">remove collect fail</string>
+    <string name="confirm_order">confirm order</string>
+    <string name="add_goods_success">add goods success</string>
+    <string name="add_goods_fail">add goods fail</string>
 </resources>
