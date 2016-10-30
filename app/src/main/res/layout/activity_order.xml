@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.nealyi.app.activity.OrderActivity">
+
+    <include
+            android:id="@+id/include_title"
+            layout="@layout/common_head_title_white"/>
+
+    <LinearLayout
+            android:id="@+id/ll_receiver"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_below="@id/include_title"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        <TextView
+                android:layout_marginLeft="20dp"
+                android:text="收貨人："
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:id="@+id/et_receiver"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_phone_number"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_below="@id/ll_receiver"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        <TextView
+                android:layout_marginLeft="20dp"
+                android:text="手機號碼："
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:id="@+id/et_phone_number"
+                android:inputType="phone"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_city"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_below="@id/ll_phone_number"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        <TextView
+                android:layout_marginLeft="20dp"
+                android:text="所在地區："
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <Spinner
+                android:id="@+id/spin_city"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:entries="@array/area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_address"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_below="@id/ll_city"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        <TextView
+                android:layout_marginLeft="20dp"
+                android:text="收貨地址："
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:id="@+id/et_address"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+    <RelativeLayout
+            android:id="@+id/rl_price_count"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+        <Button
+                android:id="@+id/btn_cleaning"
+                android:background="@color/main_orange"
+                android:text="確認支付"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+        <TextView
+                android:id="@+id/tv_cart_sum_price"
+                android:text="合计：¥888.00"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+</RelativeLayout>

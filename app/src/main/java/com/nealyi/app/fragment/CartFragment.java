@@ -31,6 +31,7 @@ import com.nealyi.app.net.OkHttpUtils;
 import com.nealyi.app.utils.CommonUtils;
 import com.nealyi.app.utils.ConvertUtils;
 import com.nealyi.app.utils.L;
+import com.nealyi.app.utils.MFGT;
 import com.nealyi.app.view.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class CartFragment extends BaseFragment {
     @BindView(R.id.rl_price_count)
     RelativeLayout mRlPriceCount;
 
+    String cartIds = "";
 
     @Nullable
     @Override
@@ -174,11 +176,13 @@ public class CartFragment extends BaseFragment {
     }
 
     private void sumPrice() {
+        cartIds = "";
         int sumPrice = 0;
         int rankPrice = 0;
         if (mList != null && mList.size() > 0) {
             for (CartBean c : mList) {
                 if (c.isChecked()) {
+                    cartIds += c.getId() + ",";
                     sumPrice += getPrice(c.getGoods().getCurrencyPrice()) * c.getCount();
                     rankPrice += getPrice(c.getGoods().getRankPrice()) * c.getCount();
                 }
@@ -186,6 +190,7 @@ public class CartFragment extends BaseFragment {
             mTvCartSumPrice.setText("合计：¥" + Double.valueOf(rankPrice));
             mTvCartSavePrice.setText("合计：¥" + Double.valueOf(sumPrice - rankPrice));
         } else {
+            cartIds = "";
             mTvCartSumPrice.setText("合计：¥0.00");
             mTvCartSavePrice.setText("合计：¥0.00");
         }
@@ -212,6 +217,22 @@ public class CartFragment extends BaseFragment {
         super.onDestroy();
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        L.e(TAG, "onResume……");
+        initData();
+    }
+
+    @OnClick(R.id.btn_cleaning)
+    public void buy() {
+        if (cartIds != null && cartIds.length() > 0) {
+            MFGT.gotoBuy(mContext, cartIds);
+        } else {
+            CommonUtils.showShortToast(R.string.order_nothing);
         }
     }
 }

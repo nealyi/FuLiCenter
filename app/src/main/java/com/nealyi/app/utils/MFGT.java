@@ -96,4 +96,9 @@ public class MFGT {
         intent.setClass(context, LoginActivity.class);
         startActivityForResult(context,intent,I.REQUEST_CODE_LOGIN_FROM_CART);
     }
+
+    public static void gotoBuy(Activity context, String cardIds) {
+        Intent intent = new Intent(context, OrderActivity.class).putExtra(I.Cart.ID, cardIds);
+        startActivity(context, intent);
+    }
 }
