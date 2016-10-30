@@ -22,6 +22,7 @@ import com.nealyi.app.bean.MessageBean;
 import com.nealyi.app.net.NetDao;
 import com.nealyi.app.net.OkHttpUtils;
 import com.nealyi.app.utils.ImageLoader;
+import com.nealyi.app.utils.MFGT;
 
 import java.util.ArrayList;
 
@@ -160,6 +161,13 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
                     }
                 });
             }
+        }
+
+        @OnClick({R.id.iv_goods_thumb,R.id.tv_cart_good_name,R.id.tv_cart_good_price})
+        public void onDetail() {
+            final int position = (int) mIvAddCart.getTag();
+            CartBean cartBean = mList.get(position);
+            MFGT.gotoGoodsDetailActivity(mContext,cartBean.getGoodsId());
         }
     }
 }
